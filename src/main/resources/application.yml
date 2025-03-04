@@ -2,15 +2,24 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: auth-service
+        - id: user-service
           uri: http://localhost:8081/
           predicates:
-            - Path=/api/auth/**
-        - id: user-service
+            - Path=/api/users/**
+        - id: auth-service
           uri: http://localhost:8082/
           predicates:
-            - Path=/api/users/**
+            - Path=/api/auth/**
         - id: game-service
           uri: http://localhost:8083/
           predicates:
             - Path=/api/games/**
+
+server:
+  forward-headers-strategy: framework
+
+#logging:
+#  level:
+#    org.springframework.cloud.gateway: TRACE
+#    reactor.netty: TRACE
+
