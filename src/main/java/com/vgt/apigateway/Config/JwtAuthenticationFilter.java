@@ -25,7 +25,7 @@ public class JwtAuthenticationFilter implements WebFilter {
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
 
-        if (request.getURI().getPath().startsWith(AUTH_PATH)) { // skip jika /api/auth, entah kenapa permit all belum berfungsi
+        if (request.getURI().getPath().startsWith(AUTH_PATH)) { // skip jika /api/auth
             return chain.filter(exchange);
         }
 
@@ -46,12 +46,10 @@ public class JwtAuthenticationFilter implements WebFilter {
 
         ServerHttpRequest modifiedRequest = exchange.getRequest()
                 .mutate()
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token) // Tambahkan ulang Authorization
                 .build();
 
-        exchange.getRequest().mutate().headers(httpHeaders -> {
-            System.out.println("🛠️ Headers sebelum diteruskan ke service: " + httpHeaders);
-        });
+        System.out.println("🔍 Modified Headers: " + modifiedRequest.getHeaders());
 
         return chain.filter(exchange.mutate().request(modifiedRequest).build());
     }

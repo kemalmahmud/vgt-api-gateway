@@ -14,9 +14,14 @@ spring:
           uri: http://localhost:8083/
           predicates:
             - Path=/api/games/**
-
-server:
-  forward-headers-strategy: framework
+        - id: collection-service
+          uri: http://localhost:8084/
+          predicates:
+            - Path=/api/collections/**
+        - id: collection-diary-service
+          uri: http://localhost:8084/
+          predicates:
+            - Path=/api/diary/**
 
 #logging:
 #  level:
